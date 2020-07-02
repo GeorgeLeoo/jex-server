@@ -3,9 +3,15 @@ const { setValue } = require('../../utils/redis')
 const { getDB } = require('./../../utils')
 const User = 'User'
 
-function signUp ({ user }) {
+function signUp ({ username, password }) {
   return new Promise(resolve => {
-    getDB(User).insertMany(user, (err, docs) => {
+    if (!username) {
+      resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The username can not be undefined.' })
+    }
+    if (!password) {
+      resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The password can not be undefined.' })
+    }
+    getDB(User).insertMany({ username, password }, (err, docs) => {
         if (err) {
           resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
         } else {
@@ -18,11 +24,17 @@ function signUp ({ user }) {
 
 function signIn ({ username, password }) {
   return new Promise(resolve => {
+    if (!username) {
+      resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The username can not be undefined.' })
+    }
+    if (!password) {
+      resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The password can not be undefined.' })
+    }
     getDB(User).find({ username, password }, async (err, users) => {
       if (err) {
         resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
       } else if (users.length === 0) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: '账号或密码错误' })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The username or password is wrong.' })
       } else {
         // 生成token
         let token = utils.accessToken({ username })

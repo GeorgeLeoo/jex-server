@@ -35,5 +35,17 @@ exports.createFile = function(path, success, fail) {
   });
 }
 
+exports.hasFile = function(path) {
+  return new Promise(resolve => {
+    fs.access(path, err => {
+      if (err) {
+        createFile(path)
+        resolve(true)
+      }
+      resolve(true)
+    })
+  })
+}
+
 exports.APP_PATH = exports.resolve('src')
 exports.DIST_PATH = exports.resolve('dist')

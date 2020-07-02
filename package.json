@@ -6,7 +6,8 @@
   "scripts": {
     "bootstrap": "yarn | npm install",
     "start": "nodemon ./bin/www",
-    "build": "cross-env NODE_ENV=prod webpack --config build/webpack.config.prod.js"
+    "build:schema": "node build/schema.js",
+    "build": "npm run build:schema && cross-env NODE_ENV=prod webpack --config build/webpack.config.prod.js"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
