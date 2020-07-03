@@ -1,5 +1,6 @@
 const Response = require('../utils/Response')
 const JexDB = require('../db/module/jexDB')
+const ResponseCode = require('../utils/ResponseCode')
 
 async function getJex ({ req, res }) {
   const { query, page, order, selects = [], unSelects = [], reference = [] } = req.body
@@ -9,10 +10,10 @@ async function getJex ({ req, res }) {
     const orderKeys = Object.keys(order)
     if (orderKeys.length > 0) {
       if (order[orderKeys[0]] === 'desc') {
-        orderMap[orderKeys[0]] = '-1'
+        orderMap[orderKeys[0]] = -1
       }
       if (order[orderKeys[0]] === 'asc') {
-        orderMap[orderKeys[0]] = '1'
+        orderMap[orderKeys[0]] = 1
       }
     }
   }
@@ -74,26 +75,26 @@ async function removeJex ({ req, res }) {
 }
 
 async function incrementJex ({ req, res }) {
+  const response = new Response({ req, res })
   const { collectionName } = req.params
   const { _id, incrementObj = {} } = req.body
   if (typeof _id !== 'string') {
-    res.send({ code: 1, msg: 'The _id must be String.' })
+    response.send({ code: ResponseCode.CLIENT_ERROR, msg: 'The _id must be String.' })
     return
   }
   if (!_id) {
-    res.send({ code: 1, msg: 'The _id can not be undefined or ""' })
+    response.send({ code: ResponseCode.CLIENT_ERROR, msg: 'The _id can not be undefined or "".' })
     return
   }
   if (Object.keys(incrementObj).length === 0) {
-    res.send({ code: 1, msg: 'At a minimum, set the field name of the count' })
+    response.send({ code: ResponseCode.CLIENT_ERROR, msg: 'At a minimum, set the field name of the count.' })
     return
   }
   if (typeof incrementObj[Object.keys(incrementObj)[0]] !== 'number') {
-    res.send({ code: 1, msg: 'The value added must be a numeric type' })
+    response.send({ code: ResponseCode.CLIENT_ERROR, msg: 'The value added must be a numeric type.' })
     return
   }
   const { code, msg, data } = await JexDB.incrementJex({ collectionName, _id, incrementObj })
-  const response = new Response({ req, res })
   response.send({ code, msg, data })
 }
 

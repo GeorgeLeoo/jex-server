@@ -1,7 +1,7 @@
 const redis = require('redis')
 const { promisifyAll } = require('bluebird')
 const redisConfig = require('./../../configuration/redis.json')
-
+console.log(redisConfig)
 /**
  * redis配置
  * @type {{password: string | string, port: *, host: *, detect_buffers: boolean, retry_strategy: options.retry_strategy}}

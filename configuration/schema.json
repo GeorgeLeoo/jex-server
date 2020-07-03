@@ -7,9 +7,13 @@
       "type": "String"
     }
   },
-  "Notice": {
+  "Article": {
     "title": {
       "type": "String"
+    },
+    "author": {
+      "type": "Schema.Types.ObjectId",
+      "ref": "Users"
     },
     "content": {
       "type": "String"

@@ -1,7 +1,7 @@
 const Response = require('../utils/Response')
 const UserDB = require('./../db/module/userDB')
 const ResponseCode = require('../utils/ResponseCode')
-const { delValue } = require('../utils/redis')
+// const { delValue } = require('../utils/redis')
 
 async function signUp ({ req, res }) {
   const response = new Response({ req, res })
@@ -33,7 +33,7 @@ async function getCurrent ({ req, res }) {
 
 async function logout ({ req, res }) {
   const token = req.headers['jex-token']
-  delValue(token)
+  // delValue(token)
   const response = new Response({ req, res })
   response.send({ code: ResponseCode.SUCCESS })
 }
