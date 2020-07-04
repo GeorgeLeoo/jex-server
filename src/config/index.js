@@ -1,5 +1,8 @@
 const _whiteList = require('./../../configuration/whiteList.json')
 const systemWhiteList = require('./system/systemWhiteList.json')
+const db = require('./../../configuration/db.json')
+const { getDB_URL } = require('./../utils')
+
 const getWhiteList = function () {
   const list = Object.assign({}, systemWhiteList, _whiteList)
   const keys = Object.keys(list)
@@ -19,6 +22,9 @@ const getWhiteList = function () {
   return Object.values(list)
 }
 
+const DB_URL = getDB_URL(db)
+
 module.exports = {
-  whiteList: getWhiteList()
+  whiteList: getWhiteList(),
+  DB_URL
 }

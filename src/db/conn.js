@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const { getDB_URL } = require('./../utils')
-
+const { DB_URL } = require('./../config')
+console.log(DB_URL)
 /**
  * 连接
  */
-mongoose.connect(getDB_URL, {
+mongoose.connect(DB_URL, {
 	useNewUrlParser: true,
 	useCreateIndex: true,
 	useUnifiedTopology: true

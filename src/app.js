@@ -35,7 +35,8 @@ function hasToken ({ token, req, res, next }) {
 }
 
 app.use(function (req, res, next) {
-  if (whiteList.indexOf(req.params.collectionName) > -1) {
+  const param = req.originalUrl || req.params.collectionName
+  if (whiteList.indexOf(param) > -1) {
     next()
   } else {
     const token = req.headers['jex-token']
