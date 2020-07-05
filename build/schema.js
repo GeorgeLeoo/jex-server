@@ -48,7 +48,12 @@ function createSchema (collectionNames, schemaPath, customSchema) {
     if (!isValidate(customSchema[v])) {
       throw new Error('Column names are illegal and must contain letters or underscores.')
     }
-    const item = JSON.stringify(customSchema[v], null, 2).replace(/"/g, '')
+    let item = JSON.stringify(customSchema[v], null, 2).replace(/"/g, '')
+    const itemMatch = item.match(/ref:\s\b\w+\b/g)
+    if (itemMatch && itemMatch.length > 0) {
+      const refValue = itemMatch[0].match(/\s\b\w+\b/g)
+      item = item.replace(/ref:\s\b\w+\b/g, `ref: "${refValue[0].trim()}"`)
+    }
     fs.writeFile(getSchemaFilePath(v), renderSchema(v, item), err => {
       if (err) throw err
       console.log(`${i + 1}. ${v}.js create success`)

@@ -22,9 +22,16 @@ const getWhiteList = function () {
   return Object.values(list)
 }
 
-const DB_URL = getDB_URL(db)
+const captchaOptions = {
+  noise: 0,
+  height: 31,
+  width: 100,
+  fontSize: 36
+}
 
 module.exports = {
   whiteList: getWhiteList(),
-  DB_URL
+  DB_URL: getDB_URL(db),
+  JexCaptchaKey: 'JexCaptchaKey',
+  captchaOptions
 }

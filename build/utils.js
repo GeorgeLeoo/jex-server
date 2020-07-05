@@ -5,12 +5,12 @@ exports.resolve = function (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-exports.renderSchema = function (collectionName, db) {
+exports.renderSchema = function (collectionName, collectionStructure) {
   return `// Auto build by build/index.js
   
 const db = require('../../db/conn')
 const Schema = db.Schema
-const JexSchema = new Schema(${db})
+const JexSchema = new Schema(${collectionStructure})
 module.exports = db.model('${collectionName}s', JexSchema)
 `
 }

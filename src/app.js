@@ -11,6 +11,7 @@ const userRouter = require('./routes/userRouter')
 const ResponseCode = require('./utils/ResponseCode')
 const Response = require('./utils/Response')
 const { whiteList } = require('./config')
+const { checkToken } = require('./utils')
 
 const app = express()
 
@@ -25,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 function hasToken ({ token, req, res, next }) {
   const response = new Response({ req, res })
-  utils.checkToken(token).then(async data => {
+  checkToken(token).then(async data => {
       req.data = data
       next()
     })
@@ -39,7 +40,8 @@ app.use(function (req, res, next) {
   if (whiteList.indexOf(param) > -1) {
     next()
   } else {
-    const token = req.headers['jex-token']
+    const token = req.headers['x-jex-token']
+    // console.log(token)
     if (!token) {
       const response = new Response({ req, res })
       response.send({ code: ResponseCode.UN_AUTHORIZATION, msg: 'Token is invalid.' })

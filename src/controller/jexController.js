@@ -18,19 +18,23 @@ async function getJex ({ req, res }) {
     }
   }
   const selectMap = {}
-  selects.map(v => {
-    selectMap[v] = 1
-  })
-  if (!selects.includes('_id')) {
-    selectMap['_id'] = 0
+  const unselectMap = {}
+  if (selects.length !== 0 || unSelects.length !== 0) {
+    selects.map(v => {
+      selectMap[v] = 1
+    })
+    if (selects.length !== 0 && !selects.includes('_id')) {
+      unselectMap['_id'] = 0
+    }
+    unSelects.map(v => {
+      unselectMap[v] = 0
+    })
   }
-  unSelects.map(v => {
-    selectMap[v] = 0
-  })
   const { code, msg, data } = await JexDB.getJex({
     collectionName,
     query,
-    filter: selectMap,
+    selectMap,
+    unselectMap,
     reference,
     page,
     orderMap
@@ -98,10 +102,19 @@ async function incrementJex ({ req, res }) {
   response.send({ code, msg, data })
 }
 
+async function statJex ({ req, res }) {
+  const response = new Response({ req, res })
+  const { collectionName } = req.params
+  const { stat, order } = req.body
+  const { code, msg, data } = await JexDB.statJex({ collectionName, stat, order })
+  response.send({ code, msg, data })
+}
+
 module.exports = {
   getJex,
   getCount,
   updateAndInsertJex,
   removeJex,
-  incrementJex
+  incrementJex,
+  statJex
 }

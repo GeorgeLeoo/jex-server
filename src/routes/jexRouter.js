@@ -22,4 +22,8 @@ JexRouter.post('/increment/:collectionName', async function (req, res) {
   await jexController.incrementJex({ req, res })
 })
 
+JexRouter.post('/stat/:collectionName', async function (req, res) {
+  await jexController.statJex({ req, res })
+})
+
 module.exports = JexRouter

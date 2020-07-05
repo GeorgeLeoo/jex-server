@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const { DB_URL } = require('./../config')
-console.log(DB_URL)
 /**
  * 连接
  */
@@ -15,7 +14,7 @@ mongoose.connect(DB_URL, {
  * 连接成功
  */
 mongoose.connection.on("connected", function() {
-	console.log("<<<<< Mongoose connection open to " + getDB_URL);
+	console.log("<<<<< Mongoose connection open to " + DB_URL);
 });
 
 /**
