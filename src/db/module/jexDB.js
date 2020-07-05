@@ -23,6 +23,7 @@ function getJex ({ collectionName, query, selectMap = {}, unselectMap = {}, refe
       // 把需要的集合都调用一遍，这样才能注册到mongoose中
       getDB(v.path)
       v.path = v.path.toLowerCase()
+      v.select = { password: 0, __v: 0 }
       return v
     })
     DB.find(query, selectMap, { __v: 0 })
