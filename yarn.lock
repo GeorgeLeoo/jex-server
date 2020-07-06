@@ -1533,17 +1533,17 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-express-fileupload@^1.1.6-alpha.6:
+express-fileupload@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.6.tgz#0ac2659ad8c1128c92c8580fd6e15b8b15343db0"
   integrity sha512-w24zPWT8DkoIxSVkbxYPo9hkTiLpCQQzNsLRTCnecBhfbYv+IkIC5uLw2MIUAxBZ+7UMmXPjGxlhzUXo4RcbZw==
   dependencies:
     busboy "^0.3.1"
 
-express-jwt@^5.3.1:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-5.3.3.tgz#e557b4a63dd34c5ddd6ad81452738386314cc243"
-  integrity sha512-UdB8p5O8vGYTKm3SfREnLgVGIGEHcL3lrVyi3ebEX2qhMuagN623ju7ywWis+qYL+CXE7G1qPc2bCPBAg2MxZQ==
+express-jwt@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-6.0.0.tgz#20886c730983ffb1c706a4383235df86eff349b8"
+  integrity sha512-C26y9myRjx7CyhZ+BAT3p+gQyRCoDZ7qo8plCvLDaRT6je6ALIAQknT6XLVQGFKwIy/Ux7lvM2MNap5dt0T7gA==
   dependencies:
     async "^1.5.0"
     express-unless "^0.3.0"
@@ -3084,6 +3084,11 @@ node.flow@1.2.3:
   integrity sha1-4cRKgq7KjXi0WKd/s9xkLy66Jkk=
   dependencies:
     node.extend "1.0.8"
+
+nodemailer@^6.4.10:
+  version "6.4.10"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.4.10.tgz#f4c8dc7991c57f41fd081bef224ef01f7065143d"
+  integrity sha512-j+pS9CURhPgk6r0ENr7dji+As2xZiHSvZeVnzKniLOw1eRAyM/7flP0u65tCnsapV8JFu+t0l/5VeHsCZEeh9g==
 
 nodemon@^2.0.4:
   version "2.0.4"
