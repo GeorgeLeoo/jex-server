@@ -29,9 +29,19 @@ const captchaOptions = {
   fontSize: 36
 }
 
+const emailConfig = {
+  host: 'smtp.qq.com',
+  port: 465,
+  auth: {
+    user: '18921483103@qq.com', //刚才注册的邮箱账号
+    pass: 'fdpzsisgpmbfdgeg'  //邮箱的授权码，不是注册时的密码
+  }
+}
+
 module.exports = {
   whiteList: getWhiteList(),
   DB_URL: getDB_URL(db),
   JexCaptchaKey: 'JexCaptchaKey',
-  captchaOptions
+  captchaOptions,
+  email: emailConfig
 }

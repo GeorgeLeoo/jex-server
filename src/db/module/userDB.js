@@ -18,7 +18,7 @@ function signUp ({ username, password, email, phone }) {
             const field = err.writeErrors[0].errmsg.split('dup key: ')[1].split(':')[0].split('{ ')[1]
             resolve({ code: ResponseCode.EXIST, msg: { field, msg: `The ${field} already exists.` } })
           } else {
-            resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+            resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
           }
         } else {
           resolve({ code: ResponseCode.SUCCESS, msg: 'ok', data: [] })
@@ -38,7 +38,7 @@ function signIn ({ username, password }) {
     }
     getDB(User).find({ username, password }, async (err, users) => {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else if (users.length === 0) {
         resolve({ code: ResponseCode.CLIENT_ERROR, msg: 'The username or password is wrong.' })
       } else {
@@ -62,7 +62,7 @@ function current (uid, showPwd = false) {
   return new Promise((resolve) => {
     getDB(User).find({ _id: uid }, { pwd: showPwd ? 1 : 0, __v: 0 },(err, users) => {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else {
         if (users.length > 0) {
           resolve({ code: ResponseCode.SUCCESS, data: users[0] })

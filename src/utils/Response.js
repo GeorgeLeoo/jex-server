@@ -2,7 +2,7 @@
  * 响应
  * @type {{SUCCESS: number, SERVICE_ERROR: number, CLIENT_ERROR: number, UN_AUTHORIZATION: number, FAIL: number}}
  */
-const { ResponseCode } = require('./ResponseCode')
+const ResponseCode = require('./ResponseCode')
 
 class Response {
   /**
@@ -25,6 +25,10 @@ class Response {
     let body = { code, msg, data }
     this.res.status(200)
     this.res.send(body)
+  }
+  
+  sendSuccess (data = []) {
+    this.send({ code: ResponseCode.SUCCESS, data })
   }
   
   /**

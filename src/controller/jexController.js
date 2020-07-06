@@ -1,9 +1,10 @@
 const Response = require('../utils/Response')
 const JexDB = require('../db/module/jexDB')
 const ResponseCode = require('../utils/ResponseCode')
+const { getDB } = require('../utils')
 
 async function getJex ({ req, res }) {
-  const { query, page, order, selects = [], unSelects = [], reference = [] } = req.body
+  let { query, page, order, selects = [], unSelects = [], reference = [] } = req.body
   const { collectionName } = req.params
   const orderMap = {}
   if (order) {
@@ -17,8 +18,8 @@ async function getJex ({ req, res }) {
       }
     }
   }
-  const selectMap = {}
-  const unselectMap = {}
+  let selectMap = {}
+  let unselectMap = {}
   if (selects.length !== 0 || unSelects.length !== 0) {
     selects.map(v => {
       selectMap[v] = 1
@@ -30,11 +31,26 @@ async function getJex ({ req, res }) {
       unselectMap[v] = 0
     })
   }
+  if (collectionName === 'User') {
+    unselectMap = Object.assign({}, unselectMap, { password: 0 })
+  }
+  unselectMap = Object.assign({}, unselectMap)
+  if (Object.keys(selectMap).length === 0) {
+    unselectMap.__v = 0
+  }
+  selectMap = Object.assign({}, selectMap, unselectMap)
+  reference = reference.map(v => {
+    // 把需要的集合都调用一遍，这样才能注册到mongoose中
+    getDB(v.path)
+    v.path = v.path.toLowerCase()
+    v.select = Object.assign({}, v.select)
+    return v
+  })
+  // console.log(reference)
   const { code, msg, data } = await JexDB.getJex({
     collectionName,
     query,
     selectMap,
-    unselectMap,
     reference,
     page,
     orderMap
@@ -78,6 +94,13 @@ async function removeJex ({ req, res }) {
   response.send({ code, msg, data })
 }
 
+async function removeManyJex ({ req, res }) {
+  const { collectionName } = req.params
+  const { code, msg, data } = await JexDB.removeManyJex({ collectionName, condition: req.body })
+  const response = new Response({ req, res })
+  response.send({ code, msg, data })
+}
+
 async function incrementJex ({ req, res }) {
   const response = new Response({ req, res })
   const { collectionName } = req.params
@@ -115,6 +138,7 @@ module.exports = {
   getCount,
   updateAndInsertJex,
   removeJex,
+  removeManyJex,
   incrementJex,
   statJex
 }

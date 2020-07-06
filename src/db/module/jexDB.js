@@ -5,27 +5,12 @@ const { isString } = require('../../utils/dataType')
 const { getDB } = require('./../../utils')
 const defaultPage = { limitNumber: 100, skipNumber: 1 }
 
-function getJex ({ collectionName, query, selectMap = {}, unselectMap = {}, reference, page = defaultPage, orderMap }) {
+function getJex ({ collectionName, query, selectMap = {}, reference, page = defaultPage, orderMap }) {
   return new Promise(resolve => {
     if (!collectionName) {
       resolve({ code: ResponseCode.CLIENT_ERROR, msg: 'The collectionName can not be undefined.' })
     }
-    if (collectionName === 'User') {
-      unselectMap = Object.assign({}, unselectMap, { password: 0 })
-    }
-    unselectMap = Object.assign({}, unselectMap)
-    if (Object.keys(selectMap).length === 0) {
-      unselectMap.__v = 0
-    }
-    selectMap = Object.assign({}, selectMap, unselectMap)
     const DB = getDB(collectionName)
-    reference = reference.map(v => {
-      // 把需要的集合都调用一遍，这样才能注册到mongoose中
-      getDB(v.path)
-      v.path = v.path.toLowerCase()
-      v.select = { password: 0, __v: 0 }
-      return v
-    })
     DB.find(query, selectMap, { __v: 0 })
       .populate(reference)
       .limit(parseInt(page.limitNumber))
@@ -55,7 +40,7 @@ function getCount ({ collectionName, query }) {
     const DB = getDB(collectionName)
     DB.countDocuments(query, function (err, count) {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else {
         resolve({ code: ResponseCode.SUCCESS, msg: 'ok', data: { count } })
       }
@@ -77,7 +62,7 @@ function updateJex ({ collectionName, query, update }) {
     const DB = getDB(collectionName)
     DB.updateMany(query, { $set: update }, (err, docs) => {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else {
         if (docs.n >= 1 && docs.ok === 1 && docs.nModified >= 1) {
           resolve({ code: ResponseCode.SUCCESS, msg: 'ok' })
@@ -100,7 +85,7 @@ function insertJex ({ collectionName, insertData }) {
     const DB = getDB(collectionName)
     DB.insertMany(insertData, (err, docs) => {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else {
         resolve({ code: ResponseCode.SUCCESS, msg: 'ok', data: docs })
       }
@@ -119,10 +104,34 @@ function removeJex ({ collectionName, condition }) {
     const DB = getDB(collectionName)
     DB.deleteMany(condition, (err, docs) => {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else if (docs.ok === 1 && docs.n > 0 && docs.deletedCount > 0) {
         resolve({ code: ResponseCode.SUCCESS, msg: 'ok', data: [] })
       }
+    })
+  })
+}
+
+function removeManyJex ({ collectionName, condition }) {
+  return new Promise(resolve => {
+    if (!collectionName) {
+      resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The collectionName can not be undefined.' })
+    }
+    if (!isArray(condition) || condition.length === 0) {
+      resolve({
+        code: ResponseCode.SERVICE_ERROR,
+        msg: 'The condition can must be array type and condition length must > 0.'
+      })
+    }
+    const DB = getDB(collectionName)
+    condition.map(v => {
+      DB.deleteMany({ _id: v }, (err, docs) => {
+        if (err) {
+          resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
+        } else if (docs.ok === 1 && docs.n > 0 && docs.deletedCount > 0) {
+          resolve({ code: ResponseCode.SUCCESS, msg: 'ok', data: [] })
+        }
+      })
     })
   })
 }
@@ -141,7 +150,7 @@ function incrementJex ({ collectionName, _id, incrementObj }) {
     const DB = getDB(collectionName)
     DB.updateMany({ _id }, { $inc: incrementObj }, (err, docs) => {
       if (err) {
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else {
         if (docs.n === 1 && docs.ok === 1 && docs.nModified === 1) {
           resolve({ code: ResponseCode.SUCCESS, msg: 'ok' })
@@ -159,17 +168,10 @@ function statJex ({ collectionName, stat, order }) {
     if (!collectionName) {
       resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The collectionName can not be undefined.' })
     }
-    // if (!operation) {
-    //   resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The operation can not be undefined.' })
-    // }
-    // if (!field) {
-    //   resolve({ code: ResponseCode.SERVICE_ERROR, msg: 'The field can not be undefined.' })
-    // }
     const orderMap = {
       'desc': -1,
       'asc': 1
     }
-    
     let match = null
     let total = {}
     let groupby = null
@@ -177,7 +179,7 @@ function statJex ({ collectionName, stat, order }) {
     if (order) {
       const orderKeys = Object.keys(order)
       if (orderKeys.length > 0) {
-        sort = { $sort : { [orderKeys[0]] : orderMap[order[orderKeys[0]]]} }
+        sort = { $sort: { [orderKeys[0]]: orderMap[order[orderKeys[0]]] } }
       }
     }
     statKeys.map(v => {
@@ -205,11 +207,11 @@ function statJex ({ collectionName, stat, order }) {
       if (v === 'order') {
         const orderKeys = Object.keys(statItem)
         const sortOptions = {}
-        orderKeys.map(value=> {
+        orderKeys.map(value => {
           sortOptions[value] = orderMap[statItem[value]]
         })
         if (orderKeys.length > 0) {
-          sort = { $sort : sortOptions }
+          sort = { $sort: sortOptions }
         }
       }
       if (v === 'having') {
@@ -248,7 +250,7 @@ function statJex ({ collectionName, stat, order }) {
     DB.aggregate(pipeline, (err, docs) => {
       if (err) {
         console.log(err)
-        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err })
+        resolve({ code: ResponseCode.SERVICE_ERROR, msg: err.message })
       } else {
         resolve({ code: ResponseCode.SUCCESS, msg: 'ok', data: docs })
       }
@@ -262,6 +264,7 @@ module.exports = {
   updateJex,
   insertJex,
   removeJex,
+  removeManyJex,
   incrementJex,
   statJex
 }

@@ -5,9 +5,11 @@ const logger = require('morgan')
 const compression = require('compression')
 const helmet = require('helmet')
 const cors = require('cors')
+const fileUpload = require("express-fileupload");
 
 const jexRouter = require('./routes/jexRouter')
 const userRouter = require('./routes/userRouter')
+const fileRouter = require('./routes/fileRouter')
 const ResponseCode = require('./utils/ResponseCode')
 const Response = require('./utils/Response')
 const { whiteList } = require('./config')
@@ -22,6 +24,7 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(fileUpload())
 app.use(express.static(path.join(__dirname, 'public')))
 
 function hasToken ({ token, req, res, next }) {
@@ -53,5 +56,6 @@ app.use(function (req, res, next) {
 
 app.use('/jex', jexRouter)
 app.use('/jex/user', userRouter)
+app.use('/jex/file', fileRouter)
 
 module.exports = app

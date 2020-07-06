@@ -18,6 +18,10 @@ JexRouter.post('/delete/:collectionName', async function (req, res) {
   await jexController.removeJex({ req, res })
 })
 
+JexRouter.post('/deleteMany/:collectionName', async function (req, res) {
+  await jexController.removeManyJex({ req, res })
+})
+
 JexRouter.post('/increment/:collectionName', async function (req, res) {
   await jexController.incrementJex({ req, res })
 })
