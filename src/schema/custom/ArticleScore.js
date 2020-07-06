@@ -1,17 +1,20 @@
 // Auto build by build/index.js
-  
+
 const db = require('../../db/conn')
 const Schema = db.Schema
 const JexSchema = new Schema({
-  title: {
-    type: String
+  score: {
+    type: Number
+  },
+  money: {
+    type: Number
   },
   user: {
     type: Schema.Types.ObjectId,
     ref: "Users"
   },
-  content: {
+  remark: {
     type: String
   }
 })
-module.exports = db.model('Articles', JexSchema)
+module.exports = db.model('ArticleScores', JexSchema)

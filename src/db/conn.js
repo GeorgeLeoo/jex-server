@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 
-const { getDB_URL } = require('./../utils')
-
+const { DB_URL } = require('./../config')
 /**
  * 连接
  */
-mongoose.connect(getDB_URL, {
+mongoose.connect(DB_URL, {
 	useNewUrlParser: true,
 	useCreateIndex: true,
 	useUnifiedTopology: true
@@ -15,7 +14,7 @@ mongoose.connect(getDB_URL, {
  * 连接成功
  */
 mongoose.connection.on("connected", function() {
-	console.log("<<<<< Mongoose connection open to " + getDB_URL);
+	console.log("<<<<< Mongoose connection open to " + DB_URL);
 });
 
 /**

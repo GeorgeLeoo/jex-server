@@ -1,8 +1,8 @@
 {
-  "ip": "118.31.70.148",
-  "port": "57121",
+  "ip": "139.159.201.22",
+  "port": "12306",
   "username": "root",
-  "password": "5gchewu,",
+  "password": "123loveyou,",
   "dbName": "cloud",
-  "auth": "admin"
+  "authSource": "admin"
 }

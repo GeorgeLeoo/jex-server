@@ -23,8 +23,7 @@ class Response {
    */
   send ({ code = ResponseCode.SUCCESS, msg = '', data = [] }) {
     let body = { code, msg, data }
-    console.log(this.req.url, this.req.method, body)
-    this.res.status(code)
+    this.res.status(200)
     this.res.send(body)
   }
   

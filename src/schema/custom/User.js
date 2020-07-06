@@ -19,10 +19,12 @@ const JexSchema = new Schema({
     required: true
   },
   email: {
-    type: String
+    type: String,
+    unique: true
   },
   phone: {
-    type: String
+    type: String,
+    unique: true
   },
   createdAt: {
     type: Date,
