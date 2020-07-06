@@ -1,14 +1,17 @@
 // 创建一个邮件对象
-module.exports = function (user) {
+module.exports = function (sendInfo) {
   return {
-    // 发件人
-    from: '极客教程 <xxxx@163.com>',
-    // 主题
-    subject: '[极客教程]激活邮箱账号',
-    // 收件人
-    to: 'xxxx@qq.com',
-    // 邮件内容，HTML格式
-    text: `尊敬的${user.name}，您好！点击链接即可激活您的极客教程
-           网账号,http://localhost:3000/checkCode?name=${user.name}&code=${user.code}为保障您的帐号安全，请在24小时内点击该链接，您也可以将链接复制到浏览器地址栏访问。 若如果您并未尝试修改密码，请忽略本邮件，由此给您带来的不便请谅解。本邮件由系统自动发出，请勿直接回复！` //接收激活请求的链接
+    from: '"认证邮件 👻" <18921483103@qq.com>', // sender address
+    to: sendInfo.to, // list of receivers
+    subject: '【Jex科技】验证码', // Subject line
+    text: `您的邀请码是${sendInfo.code}，过期时间：${sendInfo.expire}`, // plain text body
+    html: `<div style="border: 1px solid #dcdcdc;color: #676767;width: 600px; margin: 0 auto; padding-bottom: 50px;position: relative;">
+        <div style="padding: 25px">
+          <div>尊敬的${sendInfo.user}，您好，重置链接有效时间30分钟，请在${sendInfo.expire}之前重置您的密码：</div>
+          <a href="" style="padding: 10px 20px; color: #fff; background: #009e94; display: inline-block;margin: 15px 0;">立即重置密码</a>
+          <div style="padding: 5px; background: #f2f2f2;">如果该邮件不是由你本人操作，请勿进行激活！否则你的邮箱将会被他人绑定。</div>
+        </div>
+        <div style="background: #fafafa; color: #b4b4b4;text-align: center; line-height: 45px; height: 45px; position: absolute; left: 0; bottom: 0;width: 100%;">系统邮件，请勿直接回复</div>
+    </div>` // html body
   }
 }

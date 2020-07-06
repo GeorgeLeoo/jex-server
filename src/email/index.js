@@ -1,6 +1,20 @@
 const nodemailer = require('nodemailer')
-const { email } = require('./../config')
+const ResponseCode = require('./../utils/ResponseCode')
+const { emailConfig } = require('./../config')
 
-const transporter = nodemailer.createTransport(email);
+const transporter = nodemailer.createTransport(emailConfig)
 
-module.exports = transporter
+function send (email) {
+  return new Promise(resolve => {
+    transporter.sendMail(email, function (error, info) {
+      if (error) {
+        resolve({ code: ResponseCode.CLIENT_ERROR, msg: error })
+      }
+      resolve({ code: ResponseCode.SUCCESS, msg: info.response })
+    })
+  })
+}
+
+module.exports = {
+  send
+}

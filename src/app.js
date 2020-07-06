@@ -10,6 +10,7 @@ const fileUpload = require("express-fileupload");
 const jexRouter = require('./routes/jexRouter')
 const userRouter = require('./routes/userRouter')
 const fileRouter = require('./routes/fileRouter')
+const publicRouter = require('./routes/publicRouter')
 const ResponseCode = require('./utils/ResponseCode')
 const Response = require('./utils/Response')
 const { whiteList } = require('./config')
@@ -57,5 +58,6 @@ app.use(function (req, res, next) {
 app.use('/jex', jexRouter)
 app.use('/jex/user', userRouter)
 app.use('/jex/file', fileRouter)
+app.use('/jex/public', publicRouter)
 
 module.exports = app

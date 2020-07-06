@@ -43,5 +43,5 @@ module.exports = {
   DB_URL: getDB_URL(db),
   JexCaptchaKey: 'JexCaptchaKey',
   captchaOptions,
-  email: emailConfig
+  emailConfig
 }
