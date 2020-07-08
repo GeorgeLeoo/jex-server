@@ -3,7 +3,7 @@ module.exports = function (sendInfo) {
   return {
     from: 'Jex科技 <18921483103@qq.com>', // sender address
     to: sendInfo.to, // list of receivers
-    subject: '【Jex科技】找回密码', // Subject line
+    subject: '【Jex科技】验证码', // Subject line
     text: ``, // plain text body
     html: `
     <div
@@ -19,25 +19,10 @@ module.exports = function (sendInfo) {
       <div style="padding: 25px;">
         <p style="text-indent: 2em;">尊敬的${sendInfo.user}：</p>
         <div>
-          请点击下方"立即重置"按钮进行重置密码，重置链接有效时间30分钟，请在${sendInfo.expire}之前重置您的密码：
-        </div>
-        <div style="text-align: center;">
-          <a
-            href="http://www.baidu.com"
-            target="_blank"
-            style="
-              padding: 10px 20px;
-              color: #fff;
-              background: #009e94;
-              display: inline-block;
-              margin: 15px 0;
-              text-decoration: none;
-            "
-            >立即重置</a
-          >
+          您的验证码是<span style="font-weight: bold;font-size: 20px;color: #333;">${sendInfo.code}</span>，此验证码用于重置密码，验证码有效时间30分钟。
         </div>
         <div style="padding: 5px; background: #f2f2f2;">
-          如果该邮件不是由你本人操作，请勿进行激活！否则你的邮箱将会被他人绑定。
+          如果该邮件不是由你本人操作，请勿进行使用！
         </div>
       </div>
       <div
