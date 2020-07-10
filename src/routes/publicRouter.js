@@ -6,6 +6,10 @@ JexPublicRouter.post('/captcha', function (req, res) {
   JexPublicController.getCaptcha({ req, res })
 })
 
+JexPublicRouter.post('/captchaVerify', function (req, res) {
+  JexPublicController.verifyCaptcha({ req, res })
+})
+
 JexPublicRouter.post('/requestPasswordReset', function (req, res) {
   JexPublicController.requestPasswordReset({ req, res })
 })

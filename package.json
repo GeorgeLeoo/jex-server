@@ -4,8 +4,9 @@
   "private": true,
   "main": "src/app.js",
   "scripts": {
-    "bootstrap": "yarn | npm install",
+    "boot": "yarn | npm install",
     "start": "npm run build:schema && nodemon ./bin/www",
+    "serve": "npm run boot && npm run build:schema && nodemon ./bin/www",
     "build:schema": "node build/schema.js",
     "build": "npm run build:schema && cross-env NODE_ENV=prod webpack --config build/webpack.config.prod.js"
   },

@@ -13,7 +13,7 @@ module.exports = function (sendInfo) {
         width: 600px;
         margin: 0 auto;
         padding-bottom: 50px;
-        position: relative;
+        position: relative;s
       "
     >
       <div style="padding: 25px;">

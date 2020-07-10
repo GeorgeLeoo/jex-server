@@ -7,7 +7,9 @@
  */
 const fs = require('fs')
 let customSchema = require('../configuration/schema.json')
-const systemUserSchema = require('../src/schema/system/User')
+const systemUserSchema = require('../src/schema/system/User.json')
+const systemEmailCaptcha = require('../src/schema/system/EmailCaptcha.json')
+const systemPasswordReset = require('../src/schema/system/PasswordReset.json')
 const { renderSchema, APP_PATH, createFile, removeFile } = require('./utils')
 const collectionNames = Object.keys(customSchema)
 
@@ -19,10 +21,14 @@ function getSchemaFilePath (filename) {
 
 function initUser (collectionNames) {
   const User = 'User'
+  const EmailCaptcha = 'EmailCaptcha'
+  const PasswordReset = 'PasswordReset'
   if (collectionNames.includes(User)) {
     customSchema[User] = Object.assign({}, customSchema[User], systemUserSchema[User])
   } else {
     customSchema[User] = systemUserSchema[User]
+    customSchema[EmailCaptcha] = systemEmailCaptcha[EmailCaptcha]
+    customSchema[PasswordReset] = systemPasswordReset[PasswordReset]
   }
 }
 

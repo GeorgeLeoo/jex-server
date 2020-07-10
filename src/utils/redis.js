@@ -69,7 +69,7 @@ const setValue = (key, value, time) => {
 /**
  * 根据 key 获取
  * @param key
- * @returns {*} 返回一个promise 成功回调返回 key 对应的值s
+ * @returns {*} 返回一个promise 成功回调返回 key 对应的值
  */
 const getValue = (key) => {
   return client.getAsync(key)

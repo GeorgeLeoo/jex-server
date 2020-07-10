@@ -1,5 +1,5 @@
 const svgCaptcha = require('svg-captcha')
-const { setValue } = require('../utils/redis')
+const { setValue, getValue } = require('../utils/redis')
 const { captchaOptions } = require('../config')
 const Response = require('../utils/Response')
 const emailServer = require('./../email')
@@ -15,7 +15,8 @@ async function getCaptcha ({ req, res }) {
 }
 
 async function requestPasswordReset ({ req, res }) {
-  const { email } = req.body
+  // const { email } = req.body
+  const email = "georgeleeo@163.com"
   const sendInfo = {
     to: email,
     code: '2339',
@@ -29,13 +30,17 @@ async function requestPasswordReset ({ req, res }) {
 }
 
 async function requestEmailCaptcha ({ req, res }) {
-  const { uuid } = req.body
+  const { uuid, email } = req.body
+  console.log(email);
+  
+  // const email = "georgeleeo@163.com"
   const captcha = svgCaptcha.create(captchaOptions)
+  const captchaData = captcha.text
   // setValue(uuid, captcha.text.toLowerCase(), 43200)
   // 存到数据库
   const sendInfo = {
     to: email,
-    code: '3455',
+    code: captchaData,
     expire: '2020-10-02 10:22:34',
     user: email
   }
@@ -55,10 +60,22 @@ async function requestEmailCaptchaVerify({req, res}) {
   // response.send({ code, msg, data })
 }
 
+async function verifyCaptcha({req, res}) {
+  const response = new Response({ res })
+  const { uuid, captcha } = req.body
+  const data = await getValue(uuid)
+  if (data === captcha) {
+    response.send({ msg: 'ok' })
+  } else {
+    response.send({ msg: 'no' })
+  }
+}
+
 module.exports = {
   getCaptcha,
   requestPasswordReset,
   requestEmailCaptcha,
   requestPasswordResetVerify,
-  requestEmailCaptchaVerify
+  requestEmailCaptchaVerify,
+  verifyCaptcha
 }

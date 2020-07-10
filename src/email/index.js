@@ -10,7 +10,7 @@ function send (email) {
       if (error) {
         resolve({ code: ResponseCode.CLIENT_ERROR, msg: error })
       }
-      resolve({ code: ResponseCode.SUCCESS, msg: info.response })
+      resolve({ code: ResponseCode.SUCCESS, msg: info })
     })
   })
 }
